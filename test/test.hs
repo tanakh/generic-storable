@@ -4,8 +4,7 @@ import Foreign.Marshal.Alloc
 import Foreign.Storable
 import Foreign.Storable.Generic
 import GHC.Generics
-import Test.Hspec.Monadic
-import Test.Hspec.HUnit ()
+import Test.Hspec
 import Test.Hspec.QuickCheck
 import Test.QuickCheck
 import Test.QuickCheck.Property
@@ -35,7 +34,7 @@ idPokePeek v = alloca $ \ptr -> do
   return $ v == w
 
 main :: IO ()
-main = hspecX $ do
+main = hspec $ do
   describe "generic storable" $ do
     prop "instanciate a simple type" $ \i -> morallyDubiousIOProperty $ do
       idPokePeek $ SimpleType i
