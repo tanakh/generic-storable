@@ -36,19 +36,19 @@ idPokePeek v = alloca $ \ptr -> do
 main :: IO ()
 main = hspec $ do
   describe "generic storable" $ do
-    prop "instanciate a simple type" $ \i -> morallyDubiousIOProperty $ do
+    prop "instanciate a simple type" $ \i -> ioProperty $ do
       idPokePeek $ SimpleType i
-    prop "instanceate a type has multiple records" $ \i d -> morallyDubiousIOProperty $ do
+    prop "instanciate a type with multiple records" $ \i d -> ioProperty $ do
       idPokePeek $ MultipleRecords i d
-    prop "instanceate a type has multiple records with names" $ \i d -> morallyDubiousIOProperty $ do
+    prop "instanciate a type with multiple records with names" $ \i d -> ioProperty $ do
       idPokePeek $ MultipleRecordsWithNames i d
-    prop "instanceate a type has multiple constructor" $ do
+    prop "instanciate a type with multiple constructors" $ do
       typ <- elements [0,1,2]
-      v <- case typ ::Int of
+      v <- case typ :: Int of
         0 -> ConA <$> arbitrary
         1 -> ConB <$> arbitrary
         2 -> ConC <$> arbitrary <*> arbitrary
-      morallyDubiousIOProperty $ do
+      return $ ioProperty $ do
         idPokePeek v
-    prop "instanceate a type has multiple constructor" $ \i c d -> morallyDubiousIOProperty $ do
+    prop "instanciate a type with parameters" $ \i c d -> ioProperty $ do
         idPokePeek $ TypeWithParameters (i :: Int) (c :: Char) (d :: Double)
